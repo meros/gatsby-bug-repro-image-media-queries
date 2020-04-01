@@ -1,21 +1,56 @@
 import React from "react"
-import { Link } from "gatsby"
+import { graphql } from "gatsby"
+import Img from "gatsby-image"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
-
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
+const IndexPage = ({ data }) => (
+  <Img
+    fluid={[
+      {
+        ...data.phone.childImageSharp.fluid,
+        media: `(max-width: 480px)`,
+      },
+      {
+        ...data.tablet.childImageSharp.fluid,
+        media: `(max-width: 768px)`,
+      },
+      {
+        ...data.computer.childImageSharp.fluid,
+        media: `(min-width: 769px)`,
+      },
+    ]}
+  />
 )
 
 export default IndexPage
+
+export const query = graphql`
+  query {
+    computer: file(relativePath: { eq: "computer.jpg" }) {
+      childImageSharp {
+        # Specify the image processing specifications right in the query.
+        # Makes it trivial to update as your page's design changes.
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    tablet: file(relativePath: { eq: "tablet.jpg" }) {
+      childImageSharp {
+        # Specify the image processing specifications right in the query.
+        # Makes it trivial to update as your page's design changes.
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    phone: file(relativePath: { eq: "phone.jpg" }) {
+      childImageSharp {
+        # Specify the image processing specifications right in the query.
+        # Makes it trivial to update as your page's design changes.
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+  }
+`
